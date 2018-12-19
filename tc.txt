@@ -1,0 +1,104 @@
+	 WebDriver driver;
+	@Test(priority=3, enabled=false)
+	public void testVerifyInValidAccess() {
+		
+		 System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
+		 driver = new ChromeDriver();
+	    String baseUrl = "https://www.facebook.com";
+	    driver.get(baseUrl + "/");
+		//Create an instance of a Selenium explicit wait so that we can dynamically wait for an element 
+		WebDriverWait wait = new WebDriverWait(driver, 5); 
+
+		 //wait for the user name field to be visible and store that element into a variable 
+		By userNameFieldLocator = By.cssSelector("#email");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(userNameFieldLocator)); 
+		
+		 driver.findElement(userNameFieldLocator).sendKeys("sdettraining@gmail.com");
+		 
+		 driver.findElement(By.cssSelector("#pass")).sendKeys("Passw0rd!@#");
+			// Thread.sleep(3000);
+		 driver.findElement(By.id("u_0_2")).click();
+		 
+		   //Synchronize on the next page and make sure it loads 
+		 By recoverYourAccount = By.xpath("/html/body/div[1]/div[3]/div[1]/div/div/div[2]/form/div/div[4]/div[1]/a"); 
+		 wait.until(ExpectedConditions.visibilityOfElementLocated(recoverYourAccount)); 
+
+		 String expectedValue = "The email you’ve entered doesn’t match any account. Sign up for an account.";
+			String actualValue;
+			// Thread.sleep(3000);
+			actualValue = "";
+			actualValue = driver
+					.findElement(By.cssSelector(
+							"#globalContainer > div.uiContextualLayerPositioner._572t.uiLayer > div > div > div"))
+					.getText();
+
+			System.out.println("actual Value is: " + actualValue);
+			
+			  //Assert that the recover account page displayed appropriately 
+			 Assert.assertTrue(driver.findElement(recoverYourAccount).isDisplayed()); 
+
+
+			if (expectedValue.equals(actualValue)) {
+				System.out.println("InValidAccess worked.....TEST PASSED");
+			}
+
+			else
+				System.out.println("TEST FAILED");
+			 driver.quit();
+			 
+	}
+	
+	String BROWSER;
+	
+	  @BeforeClass
+	  @org.testng.annotations.Parameters(value={"browser","version","platform"})
+	  public void setUp(String browser, String version, String platform) throws Exception {
+	  
+		BROWSER=browser;
+		if (browser.equals("firefox")) {
+
+			System.setProperty("webdriver.gecko.driver", "geckodriver.exe");
+			WebDriver driver = new FirefoxDriver();
+			System.out.println("Running test in browser....." + browser);
+           
+		} 
+		else if  (browser.equals("chrome"))
+		{
+			 System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
+			 driver = new ChromeDriver();
+			 System.out.println("Running test in browser....." + browser);
+
+		}
+		else 
+		{
+			 System.setProperty("webdriver.ie.driver", "IEDriverServer.exe");
+			 driver = new InternetExplorerDriver();
+			 System.out.println("Running test in browser....." + browser);
+		}
+
+	  
+	  }
+
+	  @Test
+	  public void test_TestNGParametersDemo() throws Exception {
+	    driver.get("http://www.google.com");
+	    System.out.println("Page title is: " + driver.getTitle());
+	    Assert.assertEquals("Google", driver.getTitle());
+	    WebElement element = driver.findElement(By.name("q"));
+	    element.sendKeys("Fannie Mae");
+	    element.submit();
+	    driver = new Augmenter().augment(driver);
+	    File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+	    try {
+	      FileUtils.copyFile(srcFile, new File("Screenshot_from_" + BROWSER +".png"));
+	    } catch (IOException e) {
+	      e.printStackTrace();
+	    }
+	  }
+
+	  @AfterClass
+	  public void tearDown() throws Exception {
+		  System.out.println("Finished Running test in browser....." + BROWSER + "....closing down");
+	    driver.quit();
+	  }
+	

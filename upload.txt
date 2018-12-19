@@ -1,0 +1,10 @@
+@Test
+	public void test_upload() {
+		driver = new ChromeDriver();
+		((ChromeDriver) driver).setFileDetector(new LocalFileDetector());
+		driver.get("http://www.fileconvoy.com/");
+		driver.findElement(By.id("upfile_0")).sendKeys("C:\\Users\\Dell\\Pictures\\training\\img_3088.jpg");
+		driver.findElement(By.id("readTermsOfUse")).click();
+		driver.findElement(By.name("form_upload")).submit();
+		driver.quit();
+	}

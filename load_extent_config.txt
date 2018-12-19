@@ -1,0 +1,6 @@
+extentReport
+        .addSystemInfo("Host Name", "SDETTraining.com")
+        .addSystemInfo("Environment", "Fannie Mae Selenium Automation Testing")
+        .addSystemInfo("User Name", "IK");
+        //loading the external xml file (i.e., extent-config.xml) which was placed under the base directory
+        extentReport.loadConfig(new File(System.getProperty("user.dir")+"\\extent-config.xml"));
